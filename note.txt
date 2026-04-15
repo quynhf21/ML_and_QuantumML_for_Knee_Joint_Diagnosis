@@ -1,0 +1,37 @@
+* Variational Quantum Classifier (VQC)
+
+Trích đặc trưng ảnh 
+→ PCA (giảm còn 2 chiều) . vd [ 0.21, 0.6 ]
+→ Chuẩn hoá dữ liệu về góc 0–π . vd [ 0.66, 1.88 ]
+→ Chia train/test → One-hot nhãn 
+→ Mã hoá lượng tử bằng Hadamard (tạo chồng chập) + RZ + CNOT (ZZFeatureMap) 
+    vd: ∣ψ⟩=1/2 * ​(∣00⟩+∣01⟩+∣10⟩+∣11⟩) -> tạo chồng chập -> đang ở 4 trạng thái
+    RZ(0.66) lên qubit 1, RZ(1.88) lên qubit 2
+
+    tạo chồng chập + 
+    nhúng dữ liệu vào pha ( tạo độ lệch pha giữa 0 và 1) +
+    tạo tương tác giữa các đặc trưng (feature interaction)
+
+→ Mạch biến phân RY, RZ + CNOT (RealAmplitudes): học các tham số
+→ Đo Pauli-Z lấy output 
+→ Tính loss Cross-Entropy 
+→ Tối ưu tham số bằng COBYLA 
+→ Argmax dự đoán lớp 
+→ Đánh giá
+
+
+
+
+* Hybrid Quantum–Classical Neural Network (Hybrid QNN)
+
+Chuẩn hoá ảnh & tách tách khe khớp 
+→ Resize ảnh 8×8 
+→ Chuẩn hoá pixel về góc 0–π 
+→ Chia train/test 
+→ Mã hoá lượng tử bằng RY 
+... giống đoạn trên
+→ Đo Pauli-Z lấy vector đặc trưng lượng tử 
+→  Softmax phân loại 
+→ Tính loss Cross-Entropy 
+→ Tối ưu tham số bằng Adam 
+→ Dự đoán lớp → Đánh giá độ chính xác
